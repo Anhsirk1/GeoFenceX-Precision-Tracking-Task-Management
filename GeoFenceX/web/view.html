@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoFenceX | View</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Leaflet Draw CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700">
+    <style>
+        /* General styles */
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");
+        * {
+          margin: 0;
+          padding: 0;
+          outline: none;
+          border: none;
+          text-decoration: none;
+          box-sizing: border-box;
+          font-family: "Poppins", sans-serif;
+        }
+        body {
+          background: #dfe9f5;
+          margin: 0;
+          padding: 0;
+          display: flex;
+        }
+        .container {
+          display: flex;
+          width: 100%;
+        }
+        /* Left Navigation bar styles */
+        nav.left-nav {
+            background: #fff;
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        /* Right Navigation bar styles */
+        nav.right-nav {
+            background: #fff;
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+            overflow-y: auto;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        nav .fas {
+          position: relative;
+          width: 70px;
+          height: 40px;
+          top: 14px;
+          font-size: 20px;
+          text-align: center;
+        }
+        .nav-item {
+          position: relative;
+          top: 12px;
+          margin-left: 10px;
+        }
+        .logo {
+          text-align: center;
+          display: flex;
+          margin: 17px 0 0 18px;
+        }
+        .logo img {
+          width: 45px;
+          height: 45px;
+          border-radius: 50%;
+        }
+        .logo span {
+          font-weight: bold;
+          padding-left: 15px;
+          font-size: 20px;
+          margin-top:-5px;
+          text-transform: uppercase;
+        }
+        .sub-heading {
+          font-weight: bold;
+          font-size: 20px;
+        }
+        .location-setup span{
+          font-weight: bold;
+          padding-left: 15px;
+          font-size: 20px;
+        }
+        a {
+          position: relative;
+          color: rgb(85, 83, 83);
+          font-size: 14px;
+          display: table;
+          width: 280px;
+          padding: 10px;
+        }
+        a:hover {
+          background: #eee;
+        }
+        .logout {
+          position: absolute;
+          bottom: 0;
+        }
+        /* Map container styles */
+        #map-container {
+            flex: 1;
+            height: 100vh;
+            margin-left: 280px; /* Width of the left navbar */
+            margin-right: 280px; /* Width of the right navbar */
+        }
+        /* Placeholder box styles */
+        #data-placeholder {
+            padding: 20px;
+        }
+        #data-content {
+            margin-top: 10px;
+        }
+        .notification {
+            background-color: #e6f7ff;
+            color: #0056b3;
+            padding: 15px;
+            margin: 15px;
+            border: 1px solid #b3d7ff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+        /* Task ID input container styles */
+        .taskid-container {
+            margin: 20px 15px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        .taskid-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .taskid-container input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .taskid-container button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .taskid-container button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Task card styles */
+        .task-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #fff;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+        .task-card-header {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .task-card-content {
+            display: none;
+            padding: 10px;
+            font-size: 14px;
+        }
+        
+        .email-button {
+    padding: 15px;
+    text-align: center;
+}
+
+.email-button button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.email-button button:hover {
+    background-color: #0056b3;
+}
+    </style>
+</head>
+<body>
+    <!-- Left Navigation bar displaying retrieved data -->
+    <nav class="left-nav">
+        <div class="logo">
+            <img src="1.png" alt="GeoFenceX">
+            <span class="nav-item">GeoFenceX</span>
+        </div>
+        <div class="sub-heading">
+        <span class="nav-item">&emsp;Detection Module</span>
+        </div>
+        <div class="taskid-container">
+            <form method="get">
+                <label for="lname">TaskIDs (comma-separated):</label>
+                <input type="text" id="lname" name="lname">
+                <button type="submit" value="Submit">Submit</button>
+            </form>
+        </div>
+        <div id="data-placeholder">
+            <div id="data-content">
+                <!-- Data will be displayed here -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Map container -->
+    <div id="map-container"></div>
+
+    <!-- Right Navigation bar displaying breach notifications -->
+    <nav class="right-nav">
+        <div class="sub-heading">
+            <span class="nav-item">&emsp;Notification Module</span>
+        </div>
+        <div id="notification-area">
+            <!-- Notifications will be displayed here -->
+        </div>
+        <div class="email-button">
+        <button id="sendEmailButton">Send an Email</button>
+        </div>
+    </nav>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Leaflet Draw JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        let userMarker;
+        let userCircle;
+        let map;
+        let geofences = [];
+
+        // Function to update user's location on the map
+        function updateUserLocation(latitude, longitude) {
+            console.log('Updating user location to:', latitude, longitude); // Debug log
+            if (userMarker) {
+                map.removeLayer(userMarker);
+                map.removeLayer(userCircle);
+            }
+
+            // Add a marker at the user's location
+            userMarker = L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('Your Location').openPopup();
+
+            // Add a circle around the user's location
+            userCircle = L.circle([latitude, longitude], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.2,
+                radius: 10
+            }).addTo(map);
+
+            // Check if user is within any geofence
+            checkGeofences(latitude, longitude);
+        }
+
+        // Function to check if user is within any geofence
+        function checkGeofences(latitude, longitude) {
+            const userLatLng = L.latLng(latitude, longitude);
+
+            geofences.forEach(geofence => {
+                                const insideCircle = geofence.circle.getBounds().contains(userLatLng);
+                const currentTime = new Date();
+                const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+
+                console.log('User inside geofence:', insideCircle); // Debug log
+                console.log('Current time in minutes:', currentMinutes); // Debug log
+                console.log('From time:', geofence.fromTime, 'To time:', geofence.toTime); // Debug log
+
+                // Check if current time is within the specified time range
+                const isInTimeRange = currentMinutes >= geofence.fromTime && currentMinutes <= geofence.toTime;
+
+                // If user is outside the circle and within the specified time, display an alert
+                if (!insideCircle && isInTimeRange) {
+                    const breachTime = currentTime.toLocaleString();
+                    const breachMessage = `User have breached the boundary at ${breachTime} for task ${geofence.taskName}!`;
+                    displayNotification(breachMessage);
+                    showPopupNotification(breachMessage);
+                } else if (!insideCircle && !isInTimeRange) {
+                    const fromTimeAMPM = convertMinutesToAMPM(geofence.fromTime);
+                    const toTimeAMPM = convertMinutesToAMPM(geofence.toTime);
+                    const notAttendedMessage = `User has not attended the task ${geofence.taskName} within the specified time range: ${fromTimeAMPM} to ${toTimeAMPM}.`;
+                    displayNotification(notAttendedMessage);
+                    showPopupNotification(notAttendedMessage);
+                }
+            });
+        }
+
+        // Function to display a notification in the notification area
+        function displayNotification(message) {
+            const notificationArea = document.getElementById('notification-area');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notificationArea.appendChild(notification);
+        }
+
+        // Function to show a popup notification
+        function showPopupNotification(message) {
+            alert(message);
+        }
+
+        // Function to fetch geofence data from servlet
+        function fetchGeofenceData(taskIds) {
+            console.log('Fetching geofence data for task IDs:', taskIds); // Debug log
+            taskIds.forEach(taskId => {
+                fetch('View?id=' + taskId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error fetching geofence data:', data.error);
+                    } else {
+                        console.log('Geofence data retrieved:', data); // Debug log
+                        // Build HTML content with retrieved data
+                        const { TaskName, Latitude, Longitude, Radius, fromTime: ft, toTime: tt } = data;
+                        const fromTime = convertTimeToMinutes(ft);
+                        const toTime = convertTimeToMinutes(tt);
+
+                        // Create task card HTML
+                        const taskCard = `
+                            <div class="task-card">
+                                <div class="task-card-header" onclick="toggleTaskCard(this)">
+                                    ${TaskName} - Click to view details
+                                </div>
+                                <div class="task-card-content" style="display: none;">
+                                    <p><strong>Task Name:</strong> ${TaskName}</p>
+                                    <p><strong>From Time:</strong> ${ft}</p>
+                                    <p><strong>To Time:</strong> ${tt}</p>
+                                    <p><strong>Latitude:</strong> ${Latitude}</p>
+                                    <p><strong>Longitude:</strong> ${Longitude}</p>
+                                    <p><strong>Radius:</strong> ${Radius} meters</p>
+                                </div>
+                            </div>
+                        `;
+
+                        // Append task card to data content
+                        $('#data-content').append(taskCard);
+
+                        // Add the geofence data to the array
+                        addGeofence(TaskName, parseFloat(Latitude), parseFloat(Longitude), parseFloat(Radius), fromTime, toTime);
+                    }
+                })
+                .catch(error => console.error('Error fetching geofence data:', error));
+            });
+        }
+
+        // Convert time in HH:MM:SS format to minutes
+        function convertTimeToMinutes(time) {
+            const [hours, minutes, seconds] = time.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+        
+        // Function to convert minutes to HH:MM:SS format
+        function convertMinutesToAMPM(minutes) {
+           const hours = Math.floor(minutes / 60);
+           const remainingMinutes = minutes % 60;
+           const ampm = hours >= 12 ? 'PM' : 'AM';
+           const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+           return `${formattedHours}:${String(remainingMinutes).padStart(2, '0')} ${ampm}`;
+        }
+
+        // Toggle task card content visibility
+        function toggleTaskCard(header) {
+            const content = header.nextElementSibling;
+            content.style.display = (content.style.display === 'none') ? 'block' : 'none';
+        }
+
+        // Add a geofence to the map and store its data
+        function addGeofence(taskName, latitude, longitude, radius, fromTime, toTime) {
+            console.log('Adding geofence with coordinates:', latitude, longitude, 'and radius:', radius); // Debug log
+            // Create the map if it doesn't exist
+            if (!map) {
+                map = L.map('map-container').setView([latitude, longitude], 13);
+
+                // Add a tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+            }
+
+            // Add a marker at the specified location
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('Location').openPopup();
+
+            // Add a circle with the retrieved radius
+            const circle = L.circle([latitude, longitude], {
+                color: 'blue',
+                fillColor: 'blue',
+                fillOpacity: 0.2,
+                radius: radius
+            }).addTo(map);
+
+            // Store the geofence data
+            geofences.push({ taskName, circle, fromTime, toTime });
+        }
+
+        // Track user location and update it on the map
+        function trackUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(
+                    position => {
+                        const { latitude, longitude } = position.coords;
+                        updateUserLocation(latitude, longitude);
+                    },
+                    error => {
+                        console.error('Error getting user location:', error);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+        }
+
+        // Get task IDs from URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const taskIds = urlParams.get('lname') ? urlParams.get('lname').split(',') : ['1,4'];
+
+        // Fetch geofence data when the page loads
+        fetchGeofenceData(taskIds);
+
+        // Track user location when the page loads
+        trackUserLocation();
+    </script>
+</body>
+</html>

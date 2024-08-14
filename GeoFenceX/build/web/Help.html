@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoFenceX | Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700">
+    <style>
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body {
+            background: #dfe9f5;
+            display: flex;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        nav {
+            background: #fff;
+            width: 280px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            text-align: center;
+            display: flex;
+            margin: 10px 0 0 10px;
+        }
+        .logo img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+        .logo span {
+            font-weight: bold;
+            padding-left: 15px;
+            font-size: 18px;
+            margin-top: -5px;
+            text-transform: uppercase;
+        }
+        a {
+            color: rgb(85, 83, 83);
+            font-size: 14px;
+            display: table;
+            width: 280px;
+            padding: 10px;
+            text-decoration: none;
+        }
+        nav .fas {
+            width: 70px;
+            height: 40px;
+            font-size: 20px;
+            text-align: center;
+        }
+        .nav-item {
+            margin-left: 10px;
+        }
+        a:hover {
+            background: #eee;
+        }
+        .logout {
+            position: absolute;
+            bottom: 0;
+        }
+
+        /* Settings page styles */
+        .settings-container {
+            width: calc(100% - 180px);
+            padding: 20px;
+        }
+        .settings-card {
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .settings-card h2 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .toggle-label {
+            font-size: 16px;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #f1f1f1;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: #007bff;
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        .time-range-container {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .time-range-label {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .time-input {
+            width: 100px;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .privacy-settings {
+            margin-top: 20px;
+        }
+        .privacy-settings label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .privacy-settings input {
+            width: 80%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .notification-settings {
+            margin-top: 20px;
+        }
+        .notification-settings label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .notification-settings input {
+            width: 80%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .days-container {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .day-checkbox {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .update-btn {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+        }
+        .update-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+ 
+</body>
+</html>

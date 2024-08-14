@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoFenceX | Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700">
+    <style>
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body {
+            background: #dfe9f5;
+            display: flex;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        nav {
+            background: #fff;
+            width: 280px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            text-align: center;
+            display: flex;
+            margin: 10px 0 0 10px;
+        }
+        .logo img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+        .logo span {
+            font-weight: bold;
+            padding-left: 15px;
+            font-size: 18px;
+            margin-top: -5px;
+            text-transform: uppercase;
+        }
+        a {
+            color: rgb(85, 83, 83);
+            font-size: 14px;
+            display: table;
+            width: 280px;
+            padding: 10px;
+            text-decoration: none;
+        }
+        nav .fas {
+            width: 70px;
+            height: 40px;
+            font-size: 20px;
+            text-align: center;
+        }
+        .nav-item {
+            margin-left: 10px;
+        }
+        a:hover {
+            background: #eee;
+        }
+        .logout {
+            position: absolute;
+            bottom: 0;
+        }
+
+        /* Profile page styles */
+        .profile-container {
+            width: calc(100% - 280px);
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        .profile-card {
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            flex: 1;
+            text-align: left;
+            position: relative;
+        }
+        .profile-card .background-image {
+            width: 100%;
+            height: 150px;
+            background: url('bg.jpeg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+        .profile-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 3px solid #fff;
+        }
+        .profile-card h2 {
+            margin: 60px 0 10px;
+            font-size: 18px;
+        }
+        .profile-card .profile-info {
+            padding: 20px;
+        }
+        .profile-card .profile-info label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-align: left;
+        }
+        .profile-card .profile-info input {
+            width: 80%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            margin-right: 20px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px auto;
+        }
+        .edit-btn {
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn:hover {
+            background: #5a6268;
+        }
+        .update-btn {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .update-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchProfileData();
+        });
+
+        function fetchProfileData() {
+            fetch('profile?id=1') // Assuming id=1 for demo purposes
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error fetching profile data:', data.error);
+                    } else {
+                        document.getElementById('pname').value = data.pname;
+                        document.getElementById('pemail').value = data.pemail;
+                        document.getElementById('pphno').value = data.pphno;
+                        document.getElementById('ppwd').value = data.ppwd;
+
+                        document.getElementById('cname').value = data.cname;
+                        document.getElementById('cemail').value = data.cemail;
+                        document.getElementById('cphno').value = data.cphno;
+                        document.getElementById('cpwd').value = data.cpwd;
+                    }
+                })
+                .catch(error => console.error('Error fetching profile data:', error));
+        }
+
+        function editProfile(type) {
+            document.querySelectorAll(`#${type}Form input`).forEach(input => {
+                input.disabled = false;
+            });
+        }
+
+        function updateProfile(type) {
+            const form = document.getElementById(`${type}Form`);
+            const formData = new FormData(form);
+
+            fetch('profile', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Profile updated successfully');
+                    document.querySelectorAll(`#${type}Form input`).forEach(input => {
+                        input.disabled = true;
+                    });
+                } else {
+                    alert('Error updating profile');
+                }
+            })
+            .catch(error => console.error('Error updating profile:', error));
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#" class="logo">
+                    <img src="1.png" alt="GeoFenceX">
+                    <span class="nav-item">GeoFenceX</span>
+                </a></li>
+                <li><a href="Dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-item">Dashboard</span>
+                </a></li>
+                <li><a href="profile.html">
+                    <i class="fas fa-user"></i>
+                    <span class="nav-item">Profile</span>
+                </a></li>
+                <li><a href="locationSetup.html">
+                    <i class="fas fa-wallet"></i>
+                    <span class="nav-item">Location SetUp</span>
+                </a></li>
+                <li><a href="task.html">
+                    <i class="fas fa-tasks"></i>
+                    <span class="nav-item">Tasks</span>
+                </a></li>
+                <li><a href="view.html">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="nav-item">View</span>
+                </a></li>
+                <li><a href="Settings.html">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-item">Settings</span>
+                </a></li>
+                <li><a href="Help.html">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="nav-item">Help</span>
+                </a></li>
+                <li><a href="index.html" class="logout">
+                    <i class="fas fa-sign-out-alt" style="color:#EA3323;"></i>
+                    <span class="nav-item" style="color:red;">Log out</span>
+                </a></li>
+            </ul>
+        </nav>
+
+        <div class="profile-container">
+            <!-- Parent Profile Card -->
+            <div class="profile-card">
+                <div class="background-image"></div>
+                <img src="user.jpeg" alt="Parent Profile Picture">
+                <h2 style="text-align: center;">Parent Profile</h2>
+                <form id="parentForm" action="profile" method="POST">
+                    <div class="profile-info">
+                        <label for="pname">Parent Name</label>
+                        <input type="text" id="pname" name="pname" disabled>
+
+                        <label for="pemail">Parent Email</label>
+                        <input type="email" id="pemail" name="pemail" disabled>
+
+                        <label for="pphno">Parent Mobile Number</label>
+                        <input type="text" id="pphno" name="pphno" disabled>
+                        
+                        <label for="ppwd">Parent Password</label>
+                        <input type="text" id="ppwd" name="ppwd" disabled>
+                    </div>
+                    <div class="button-container">
+                        <button type="button" class="edit-btn" onclick="editProfile('parent')">Edit</button>
+                        <button type="button" class="update-btn" onclick="updateProfile('parent')">Update</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Child Profile Card -->
+            <div class="profile-card">
+                <div class="background-image"></div>
+                <img src="child.jpg" alt="Child Profile Picture">
+                <h2 style="text-align: center;">Child Profile</h2>
+                <form id="childForm" action="profile" method="POST">
+                    <div class="profile-info">
+                        <label for="cname">Child Name</label>
+                        <input type="text" id="cname" name="cname" disabled>
+
+                        <label for="cemail">Child Email</label>
+                        <input type="email" id="cemail" name="cemail" disabled>
+
+                        <label for="cphno">Child Mobile Number</label>
+                        <input type="text" id="cphno" name="cphno" disabled>
+                        
+                        <label for="cpwd">Child Password</label>
+                        <input type="text" id="cpwd" name="cpwd" disabled>
+                    </div>
+                    <div class="button-container">
+                        <button type="button" class="edit-btn" onclick="editProfile('child')">Edit</button>
+                        <button type="button" class="update-btn" onclick="updateProfile('child')">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

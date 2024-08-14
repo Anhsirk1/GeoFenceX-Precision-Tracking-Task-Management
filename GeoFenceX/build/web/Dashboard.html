@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoFenceX | Dashboard</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        /* Navigation bar styles */
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");
+        @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+
+        *{
+          margin: 0;
+          padding: 0;
+          outline: none;
+          border: none;
+          text-decoration: none;
+          box-sizing: border-box;
+          font-family: "Poppins", sans-serif;
+        }
+        body{
+          background: #dfe9f5;
+          margin: 0;
+          padding: 0;
+          display: flex;
+        }
+        .container{
+          display: flex;
+        }
+        nav{
+          background: #fff;
+          width: 280px;
+          overflow: hidden;
+          box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+        #map-container {
+            flex: 1; 
+            margin-left: 1px;
+        }
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+        .logo{
+          text-align: center;
+          display: flex;
+          margin: 10px 0 0 10px;
+        }
+        .logo img{
+          width: 45px;
+          height: 45px;
+          border-radius: 50%;
+        }
+        .logo span{
+          font-weight: bold;
+          padding-left: 15px;
+          font-size: 18px;
+          margin-top: -5px;
+          text-transform: uppercase;
+        }
+        a{
+          position: relative;
+          color: rgb(85, 83, 83);
+          font-size: 14px;
+          display: table;
+          width: 280px;
+          padding: 10px;
+        }
+        nav .fas{
+          position: relative;
+          width: 70px;
+          height: 40px;
+          top: 14px;
+          font-size: 20px;
+          text-align: center;
+        }
+        .nav-item{
+          position: relative;
+          top: 12px;
+          margin-left: 10px;
+        }
+        a:hover{
+          background: #eee;
+        }
+        .logout{
+          position: absolute;
+          bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+          <ul>
+            <li><a href="#" class="logo">
+              <img src="1.png" alt="GeoFenceX">
+              <span class="nav-item">GeoFenceX</span>
+            </a></li>
+            <li><a href="Dashboard.html">
+              <i class="fas fa-home"></i>
+              <span class="nav-item">Dashboard</span>
+            </a></li>
+            <li><a href="profile.html">
+              <i class="fas fa-user"></i>
+              <span class="nav-item">Profile</span>
+            </a></li>
+            <li><a href="locationSetup.html">
+              <i class="fas fa-wallet"></i>
+              <span class="nav-item">Location SetUp</span>
+            </a></li>
+            <li><a href="task.html">
+              <i class="fas fa-tasks"></i>
+              <span class="nav-item">Tasks</span>
+            </a></li>
+            <li><a href="view.html">
+              <i class="fas fa-chart-bar"></i>
+              <span class="nav-item">View</span>
+            </a></li>
+            <li><a href="Settings.html">
+              <i class="fas fa-cog"></i>
+              <span class="nav-item">Settings</span>
+            </a></li>
+            <li><a href="Help.html">
+              <i class="fas fa-question-circle"></i>
+              <span class="nav-item">Help</span>
+            </a></li>
+            <li><a href="index.html" class="logout">
+              <i class="fas fa-sign-out-alt" style="color:#EA3323;"></i>
+              <span class="nav-item" style="color:red;">Log out</span>
+            </a></li>
+          </ul>
+        </nav>
+    </div>
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Map initialization 
+        var map = L.map('map').setView([17.385044, 78.486671], 13); // Hyderabad's coordinates
+
+        // OSM layer
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        osm.addTo(map);
+
+        // Geolocation
+        if (!navigator.geolocation) {
+            console.log("Your browser doesn't support geolocation feature!")
+        } else {
+            setInterval(() => {
+                navigator.geolocation.getCurrentPosition(getPosition)
+            }, 5000);
+        }
+
+        var marker, circle;
+
+        function getPosition(position) {
+            var lat = position.coords.latitude
+            var long = position.coords.longitude
+            var accuracy = position.coords.accuracy
+
+            if (marker) {
+                map.removeLayer(marker)
+            }
+
+            if (circle) {
+                map.removeLayer(circle)
+            }
+
+            marker = L.marker([lat, long])
+            circle = L.circle([lat, long], {
+                radius: 50 // Set a smaller radius
+            })
+
+            var featureGroup = L.featureGroup([marker, circle]).addTo(map)
+
+            map.fitBounds(featureGroup.getBounds())
+
+            console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
+        }
+    </script>
+</body>
+</html>

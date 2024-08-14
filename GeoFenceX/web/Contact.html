@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoFenceX | Contact Us</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 40px 100px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      color: #fff;
+      text-transform: capitalize;
+      font-size: 40px;
+      cursor: pointer;
+    }
+    .toggle {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      background: url(https://i.ibb.co/HrfVRcx/menu.png);
+      background-repeat: no-repeat;
+      background-size: 30px;
+      background-position: center;
+      cursor: pointer;
+    }
+    .toggle.active {
+      background: url(https://i.ibb.co/rt3HybH/close.png);
+      background-repeat: no-repeat;
+      background-size: 25px;
+      background-position: center;
+      cursor: pointer;
+    }
+    .showcase {
+      position: absolute;
+      right: 0;
+      width: 100%;
+      min-height: 100vh;
+      padding: 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      transition: 0.5s;
+      z-index: 2;
+    }
+    .showcase.active {
+      right: 300px;
+    }
+    .showcase video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .text {
+      position: relative;
+      z-index: 10;
+    }
+    .text h2 {
+      font-size: 5em;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1em;
+      text-transform: uppercase;
+    }
+    .text h3 {
+      font-size: 4em;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1em;
+      text-transform: uppercase;
+    }
+    .text p {
+      font-size: 1.1em;
+      color: #fff;
+      margin: 20px 0;
+      font-weight: 400;
+      max-width: 700px;
+    }
+    .text a {
+      display: inline-block;
+      font-size: 1em;
+      background: #fff;
+      padding: 10px 30px;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 10px;
+      color: #111;
+      letter-spacing: 2px;
+      transition: 0.2s;
+    }
+    .text a:hover {
+      letter-spacing: 6px;
+    }
+    .social {
+      position: absolute;
+      z-index: 10;
+      bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .social li {
+      list-style: none;
+    }
+    .social li a {
+      display: inline-block;
+      margin-right: 20px;
+      filter: invert(1);
+      transform: scale(0.5);
+      transition: 0.5s;
+    }
+    .social li a:hover {
+      transform: scale(0.5) translateY(-15px);
+    }
+    .menu {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .menu ul {
+      position: relative;
+      text-align: center;
+    }
+    .menu ul li {
+      list-style: none;
+      margin-bottom: 20px; /* Add space between menu items */
+    }
+    .menu ul li a {
+      text-decoration: none;
+      font-size: 24px;
+      color: #111;
+      display: flex;
+      align-items: center;
+    }
+    .menu ul li a:hover {
+      color: #03a9f4; 
+    }
+    .menu ul li a span {
+      margin-right: 10px; /* Add space between icon and text */
+    }
+    .home-icon:before,
+    .login-icon:before,
+    .contact-icon:before,
+    .registration-icon:before {
+      font-family: 'Material Icons Outlined', sans-serif;
+      margin-top: -3px; /* Adjust icon alignment */
+    }
+    .home-icon:before {
+      content: 'home';
+    }
+    .login-icon:before {
+      content: 'login';
+    }
+    .contact-icon:before {
+      content: 'contact_support';
+    }
+    .registration-icon:before {
+      content: 'assignment';
+    }
+
+    /* Contact Form and Contact Information Styles */
+    .contact-section {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 1200px;
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .contact-card {
+      flex: 0 0 calc(50% - 40px);
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      margin-top: 100px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .contact-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, #2ecc71, #27ae60);
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      position: relative;
+      padding-bottom: 15px;
+      text-align: center;
+    }
+
+    h2::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: #2ecc71;
+      border-radius: 2px;
+    }
+
+    .contact-card h2 {
+      margin-bottom: 20px;
+      font-size: 2em;
+    }
+
+    .contact-card p {
+      font-size: 1em;
+    }
+
+    .contact-card ul {
+      padding: 0;
+      list-style: none;
+      text-align: left;
+    }
+
+    .contact-card ul li {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    .contact-card ul li:last-child {
+      margin-bottom: 0;
+    }
+
+    .contact-form label {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: 500;
+      color: #fff;
+      text-align: left;
+    }
+
+    .contact-form input[type="text"],
+    .contact-form input[type="email"],
+    .contact-form textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 25px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .contact-form input[type="text"]:focus,
+    .contact-form input[type="email"]:focus,
+    .contact-form textarea:focus {
+      border-color: #2ecc71;
+      outline: none;
+      background-color: #fff;
+      color: #333;
+    }
+
+    .contact-form button {
+      background-color: #2ecc71;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .contact-form button:hover {
+      background-color: #27ae60;
+    }
+    .contact-info p {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+.contact-info ul {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.contact-info ul li {
+    margin: 15px;
+    padding: 20px;
+    flex: 1 1 200px;
+    background-color: rgba(255, 255, 255, 0.2); /* Light grey background */
+    border: 1px solid #ddd; /* White border */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    text-align: center;
+    position: relative;
+}
+
+.contact-info ul li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.15);
+}
+
+.contact-info ul li:before {
+    content: '✉';
+    display: block;
+    color: var(--primary-color); /* Adjust primary color as needed */
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+.contact-info ul li:nth-child(2):before {
+    content: '☎';
+}
+
+
+    @media screen and (max-width: 1200px) {
+      .contact-section {
+        flex-direction: column;
+        align-items: center;
+      }
+      .contact-card {
+        width: 100%;
+        margin-bottom: 30px;
+      }
+    }
+    
+    @media screen and (max-width: 768px) {
+      header {
+        padding: 40px 50px;
+      }
+      .showcase {
+        padding: 80px 50px;
+      }
+      .menu {
+        width: 200px;
+      }
+      .menu ul li a {
+        font-size: 20px;
+      }
+    }
+
+    @media screen and (max-width: 576px) {
+      .showcase {
+        padding: 80px 30px;
+      }
+      .menu {
+        display: none;
+      }
+      .toggle {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="showcase">
+    <header>
+      <h2 class="logo">GeoFenceX</h2>
+      <div class="toggle"></div>
+    </header>
+    <video src="133077-755975090.mp4" muted loop autoplay></video>
+    <!-- Contact Form and Contact Information -->
+    <div class="contact-section">
+      <div class="contact-card">
+        <h2>Send us a Message</h2>
+        <form id="contactForm" class="contact-form" method="post" action="contact">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required>
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required>
+
+  <label for="message">Message:</label>
+  <textarea id="message" name="message" required></textarea>
+
+  <button type="submit">Send</button>
+      </form>
+
+      </div>
+      <div class="contact-card">
+      <div class="contact-info">
+          <h2>Contact Information</h2>
+          <p>If you have any questions or inquiries, feel free to contact us using the information below:</p>
+        <ul>
+          <li>Email: geofencexcare@gmail.com</li>
+          <li>Phone: 6304939778</li>
+        </ul>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Your menu and toggle script -->
+  <div class="menu">
+    <ul>
+      <li><a href="index.html"><span class="home-icon"></span>  Home</a></li>
+      <li><a href="Parental_login.html"><span class="login-icon"></span>  Parent Login</a></li>
+      <li><a href="Company_login.html"><span class="login-icon"></span>  Company Login</a></li>
+      <li><a href="Registration.html"><span class="registration-icon"></span>  Registration</a></li>
+      <li><a href="Contact.html"><span class="contact-icon"></span>  Contact Us</a></li>
+    </ul>
+  </div>
+
+  <script>
+    const menuToggle = document.querySelector('.toggle');
+    const showcase = document.querySelector('.showcase');
+
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      showcase.classList.toggle('active');
+    })
+
+    // Simulate form submission (you can replace this with your backend processing logic)
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Here you can add your form submission handling logic (e.g., display success message, send data to backend)
+      alert('Form submitted successfully!'); // Replace with your logic
+      // Optionally, clear the form after submission
+      contactForm.reset();
+    });
+  </script>
+</body>
+</html>
